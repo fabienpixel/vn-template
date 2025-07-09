@@ -3,7 +3,17 @@ EXTERNAL swapBackground(backgroundName)
 
 ~ swapBackground("citysquare")
 
-You find yourself in a bustling city square. It's a warm and sunny day, and the sounds of people chatting, street musicians playing, and cars honking fill the air. What will you do?
+You find yourself in a bustling city square. It's a warm and sunny day, and the sounds of people chatting, street musicians playing, and cars honking fill the air.
+
+
+# speaker: Joe
+Where did he go?
+
+* [Next]
+    # speaker: Lisa
+    I think he jumped over the fence.
+
+What will you do?
 
 * [Explore the city] -> ExploreCity
 * [Visit a nearby park] -> VisitPark

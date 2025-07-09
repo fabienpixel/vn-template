@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Ink.Runtime;
 using UnityEngine.UI;
 using TMPro;
@@ -10,6 +10,7 @@ public class Script : MonoBehaviour
     public TextAsset inkAsset;
     private Story _inkStory;
     public TextMeshProUGUI textUIElement;
+    public TextMeshProUGUI speakerUIElement;
     public Button[] choiceButtons;
     [SerializeField] private float typewriterSpeed = 0.02f;
     private Coroutine typewriterCoroutine;
@@ -69,49 +70,66 @@ public class Script : MonoBehaviour
     }
 
     void RefreshUI()
-{
-    Debug.Log("Refreshing UI...");
-
-    if (textUIElement == null)
     {
-        Debug.LogError("textUIElement is null!");
-        return;
-    }
-    else
-    {
-        Debug.Log("textUIElement text: " + textUIElement.text);
-    }
+        Debug.Log("Refreshing UI...");
 
-    // Continue with text and choices
-    string text = _inkStory.ContinueMaximally(); // Continue without parsing tags/functions
-    Debug.Log("Number of choices: " + _inkStory.currentChoices.Count);
+        if (textUIElement == null)
+        {
+            Debug.LogError("textUIElement is null!");
+            return;
+        }
 
-    currentText = text;
+        // Continue the Ink story
+        string text = _inkStory.ContinueMaximally();
+        Debug.Log("Number of choices: " + _inkStory.currentChoices.Count);
 
-     if (typewriterCoroutine != null)
+        // ✅ SPEAKER TAG PARSING
+        string speaker = "";
+        foreach (string tag in _inkStory.currentTags)
+        {
+            if (tag.StartsWith("speaker:"))
+            {
+                speaker = tag.Substring("speaker:".Length).Trim();
+                break;
+            }
+        }
+        Debug.Log("Speaker tag found: [" + speaker + "]");
+
+        if (speakerUIElement != null)
+        {
+            speakerUIElement.text = speaker;
+            speakerUIElement.gameObject.SetActive(true); // optional: keep visible even if empty
+        }
+
+        // Set currentText for typewriter
+        currentText = text;
+
+        if (typewriterCoroutine != null)
             StopCoroutine(typewriterCoroutine);
 
-     typewriterCoroutine = StartCoroutine(TypeText(currentText));
+        typewriterCoroutine = StartCoroutine(TypeText(currentText));
 
+        // Set up choices
         for (int i = 0; i < choiceButtons.Length; i++)
-    {
-        int choiceIndex = i;
+        {
+            int choiceIndex = i;
 
-        if (i < _inkStory.currentChoices.Count)
-        {
-            choiceButtons[i].gameObject.SetActive(true);
-            choiceButtons[i].onClick.RemoveAllListeners();
-            choiceButtons[i].onClick.AddListener(() => ChooseChoice(choiceIndex));
-            choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = _inkStory.currentChoices[i].text;
+            if (i < _inkStory.currentChoices.Count)
+            {
+                choiceButtons[i].gameObject.SetActive(true);
+                choiceButtons[i].onClick.RemoveAllListeners();
+                choiceButtons[i].onClick.AddListener(() => ChooseChoice(choiceIndex));
+                choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = _inkStory.currentChoices[i].text;
+            }
+            else
+            {
+                choiceButtons[i].gameObject.SetActive(false);
+            }
         }
-        else
-        {
-            choiceButtons[i].gameObject.SetActive(false);
-        }
+
+        Debug.Log("RefreshUI completed.");
     }
 
-    Debug.Log("RefreshUI completed.");
-}
 
 
     public void ChooseChoice(int choiceIndex)
