@@ -3,26 +3,19 @@ EXTERNAL swapBackground(backgroundName)
 
 ~ swapBackground("citysquare")
 
-You find yourself in a bustling city square. It's a warm and sunny day, and the sounds of people chatting, street musicians playing, and cars honking fill the air.
+This is a sentence with exactly one hundred characters total, so you can use it to test the box size.
 
+
+* [Go To Test Dialogue] -> TestDialogue
+* [Visit a nearby park] -> VisitPark
+
+=== TestDialogue ===
+
+~ swapBackground("citystreets")
 
 # speaker: Joe
 Where did he go?
 
-* [Next]
-    # speaker: Lisa
-    I think he jumped over the fence.
-
-What will you do?
-
-* [Explore the city] -> ExploreCity
-* [Visit a nearby park] -> VisitPark
-
-=== ExploreCity ===
-
-~ swapBackground("citystreets")
-
-You decide to explore the city. You wander through narrow streets, stopping to enjoy local street food and admire the architecture. After a while, you come across an art gallery hosting a special exhibition. Do you want to visit it?
 
 + [Visit the art gallery] -> ArtGallery
 
