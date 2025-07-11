@@ -1426,7 +1426,10 @@ MonoBehaviour:
   choiceButtons:
   - {fileID: 696672564}
   - {fileID: 1676276929}
-  typewriterSpeed: 0.02
+  typewriterSpeed: 0.04
+  punctuationPauseShort: 0.2
+  punctuationPauseLong: 0.6
+  punctuationPauseEllipsis: 1.2
   audioController: {fileID: 288209617}
   backgroundController: {fileID: 592333381}
 --- !u!1 &1676276925

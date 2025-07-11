@@ -3,7 +3,8 @@ EXTERNAL swapBackground(backgroundName)
 
 ~ swapBackground("citysquare")
 
-This is a sentence with exactly one hundred characters total, so you can use it to test the box size.
+Wait… did you hear that? It wasn’t just the wind, was it? No... it sounded like footsteps—slow, deliberate, and close; too close, actually.
+
 
 
 * [Go To Test Dialogue] -> TestDialogue

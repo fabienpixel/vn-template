@@ -13,6 +13,9 @@ public class Script : MonoBehaviour
     public TextMeshProUGUI speakerUIElement;
     public Button[] choiceButtons;
     [SerializeField] private float typewriterSpeed = 0.02f;
+    [SerializeField] private float punctuationPauseShort = 0.1f;  // For commas, semicolons
+    [SerializeField] private float punctuationPauseLong = 0.3f;   // For periods, question marks, exclamations
+    [SerializeField] private float punctuationPauseEllipsis = 0.6f; // For "…"
     private Coroutine typewriterCoroutine;
     private bool isTyping = false;
     private string currentText = "";
@@ -150,13 +153,26 @@ public class Script : MonoBehaviour
     {
         isTyping = true;
         textUIElement.text = "";
-        foreach (char c in fullText)
+
+        for (int i = 0; i < fullText.Length; i++)
         {
+            char c = fullText[i];
             textUIElement.text += c;
-            yield return new WaitForSeconds(typewriterSpeed);
+
+            // Check for punctuation pauses
+            if (c == '.' || c == '!' || c == '?')
+                yield return new WaitForSeconds(punctuationPauseLong);
+            else if (c == ',' || c == ';')
+                yield return new WaitForSeconds(punctuationPauseShort);
+            else if (c == '…' || (c == '.' && i + 2 < fullText.Length && fullText[i + 1] == '.' && fullText[i + 2] == '.'))
+                yield return new WaitForSeconds(punctuationPauseEllipsis);
+            else
+                yield return new WaitForSeconds(typewriterSpeed);
         }
+
         isTyping = false;
     }
+
 
     // Run an Ink function to play sound or trigger other actions
     public void PlaySoundFromInk()
