@@ -3,6 +3,7 @@ using Ink.Runtime;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class Script : MonoBehaviour
@@ -12,11 +13,16 @@ public class Script : MonoBehaviour
     public TextMeshProUGUI textUIElement;
     public TextMeshProUGUI speakerUIElement;
     public Button[] choiceButtons;
+    [SerializeField] private Image blinkingCursorImage;
+    [SerializeField] private Animator blinkingCursorAnimator;
+    [SerializeField] private Sprite cursorSprite;
     [SerializeField] private float typewriterSpeed = 0.02f;
     [SerializeField] private float punctuationPauseShort = 0.1f;  // For commas, semicolons
     [SerializeField] private float punctuationPauseLong = 0.3f;   // For periods, question marks, exclamations
     [SerializeField] private float punctuationPauseEllipsis = 0.6f; // For "…"
     private Coroutine typewriterCoroutine;
+    private Queue<string> textChunks = new Queue<string>();
+    private bool waitingForClickToContinue = false;
     private bool isTyping = false;
     private string currentText = "";
     public AudioController audioController; // Reference to the AudioController component
@@ -29,24 +35,35 @@ public class Script : MonoBehaviour
         BindPlaySoundFunction();
         BindSwapBackgroundFunction();
         RefreshUI();
+
+        if (blinkingCursorImage != null && cursorSprite != null)
+            blinkingCursorImage.sprite = cursorSprite;
+
+        ShowCursor(false);
     }
+
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Left-click
+        if (Input.GetMouseButtonDown(0))
         {
             if (isTyping)
             {
                 StopCoroutine(typewriterCoroutine);
                 textUIElement.text = currentText;
                 isTyping = false;
+                waitingForClickToContinue = true;
+                ShowCursor(true);
             }
-            else
+            else if (waitingForClickToContinue)
             {
-                // Could call Continue if no choices, or wait for click if next line
+                ShowCursor(false);
+                waitingForClickToContinue = false;
+                DisplayNextChunk();
             }
         }
     }
+
 
     // Bind external function to play sound
     void BindPlaySoundFunction()
@@ -105,7 +122,13 @@ public class Script : MonoBehaviour
         }
 
         // Set currentText for typewriter
-        currentText = text;
+        textChunks.Clear();
+        foreach (string chunk in text.Split('\n'))
+        {
+            if (!string.IsNullOrWhiteSpace(chunk))
+                textChunks.Enqueue(chunk.Trim());
+        }
+        DisplayNextChunk();
 
         if (typewriterCoroutine != null)
             StopCoroutine(typewriterCoroutine);
@@ -133,6 +156,29 @@ public class Script : MonoBehaviour
         Debug.Log("RefreshUI completed.");
     }
 
+    void DisplayNextChunk()
+    {
+        if (textChunks.Count == 0)
+        {
+            waitingForClickToContinue = false;
+            return;
+        }
+
+        string nextChunk = textChunks.Dequeue();
+        currentText = nextChunk;
+
+        if (typewriterCoroutine != null)
+            StopCoroutine(typewriterCoroutine);
+
+        typewriterCoroutine = StartCoroutine(TypeText(currentText));
+    }
+
+
+    void ShowCursor(bool show)
+    {
+        if (blinkingCursorAnimator != null)
+            blinkingCursorAnimator.SetBool("IsVisible", show);
+    }
 
 
     public void ChooseChoice(int choiceIndex)
@@ -171,6 +217,8 @@ public class Script : MonoBehaviour
         }
 
         isTyping = false;
+        waitingForClickToContinue = true;
+        ShowCursor(true);
     }
 
 

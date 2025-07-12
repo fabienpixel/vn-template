@@ -5,6 +5,8 @@ EXTERNAL swapBackground(backgroundName)
 
 Wait… did you hear that? It wasn’t just the wind, was it? No... it sounded like footsteps—slow, deliberate, and close; too close, actually.
 
+This a second sentence.
+
 
 
 * [Go To Test Dialogue] -> TestDialogue
