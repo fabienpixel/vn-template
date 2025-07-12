@@ -122,4 +122,67 @@ public class VNUIManager : MonoBehaviour
         if (backgroundController != null)
             backgroundController.SwapBackground(backgroundName);
     }
+
+    [Header("Advanced Typewriter")]
+    [SerializeField] private TextMeshProUGUI previewTextUIElement;
+
+    public Coroutine TypeTextSmartWrapped(string fullText, System.Action onComplete)
+    {
+        if (typewriterCoroutine != null)
+            StopCoroutine(typewriterCoroutine);
+
+        typewriterCoroutine = StartCoroutine(TypeTextSmartWrappedCoroutine(fullText, onComplete));
+        return typewriterCoroutine;
+    }
+
+    private IEnumerator TypeTextSmartWrappedCoroutine(string fullText, System.Action onComplete)
+    {
+        textUIElement.text = "";
+        previewTextUIElement.text = "";
+        previewTextUIElement.color = new Color(1, 1, 1, 0); // invisible, used only for measurement
+
+        string[] words = fullText.Split(' ');
+        string displayed = "";
+        string lineInProgress = "";
+        int currentLineCount = 1;
+
+        foreach (string word in words)
+        {
+            string trialLine = lineInProgress + word + " ";
+            previewTextUIElement.text = displayed + trialLine;
+            previewTextUIElement.ForceMeshUpdate();
+
+            int newLineCount = previewTextUIElement.textInfo.lineCount;
+            if (newLineCount > currentLineCount)
+            {
+                displayed += "\n";
+                currentLineCount = newLineCount;
+                lineInProgress = word + " ";
+            }
+            else
+            {
+                lineInProgress = trialLine;
+            }
+
+            foreach (char c in word + " ")
+            {
+                textUIElement.text = displayed + lineInProgress.Substring(0, (word + " ").IndexOf(c) + 1);
+                if (c == '.' || c == '!' || c == '?')
+                    yield return new WaitForSeconds(punctuationPauseLong);
+                else if (c == ',' || c == ';')
+                    yield return new WaitForSeconds(punctuationPauseShort);
+                else if (c == '…')
+                    yield return new WaitForSeconds(punctuationPauseEllipsis);
+                else
+                    yield return new WaitForSeconds(typewriterSpeed);
+            }
+
+            displayed += lineInProgress;
+            lineInProgress = "";
+        }
+
+        typewriterCoroutine = null;
+        onComplete?.Invoke();
+    }
+
 }

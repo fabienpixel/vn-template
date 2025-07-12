@@ -77,7 +77,7 @@ public class InkStoryController : MonoBehaviour
         }
 
         currentText = textChunks.Dequeue();
-        uiManager.TypeText(currentText, OnTypewriterFinished);
+        uiManager.TypeTextSmartWrapped(currentText, OnTypewriterFinished);
         isTyping = true;
     }
 
