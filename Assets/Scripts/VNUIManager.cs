@@ -9,8 +9,9 @@ public class VNUIManager : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI textUIElement;
+    [SerializeField] private GameObject choiceButtonPrefab;
+    [SerializeField] private Transform choicePanel;
     [SerializeField] private TextMeshProUGUI speakerUIElement;
-    [SerializeField] private Button[] choiceButtons;
 
     [Header("Typewriter Settings")]
     [SerializeField] private float typewriterSpeed = 0.02f;
@@ -36,23 +37,37 @@ public class VNUIManager : MonoBehaviour
         }
     }
 
-    public void DisplayChoices(List<Choice> choices, System.Action<int> callback)
+    public void DisplayChoices(List<Choice> choices, System.Action<int> onChoiceSelected)
     {
-        for (int i = 0; i < choiceButtons.Length; i++)
+        // Clear previous buttons
+        foreach (Transform child in choicePanel)
+            Destroy(child.gameObject);
+
+        // Create a button per Ink choice
+        foreach (var choice in choices)
         {
-            if (i < choices.Count)
+            GameObject buttonGO = Instantiate(choiceButtonPrefab, choicePanel);
+            TMP_Text label = buttonGO.GetComponentInChildren<TMP_Text>();
+            if (label != null)
+                label.text = choice.text;
+
+            Button button = buttonGO.GetComponent<Button>();
+            if (button != null)
             {
-                int index = i;
-                choiceButtons[i].gameObject.SetActive(true);
-                choiceButtons[i].onClick.RemoveAllListeners();
-                choiceButtons[i].onClick.AddListener(() => callback(index));
-                choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = choices[i].text;
-            }
-            else
-            {
-                choiceButtons[i].gameObject.SetActive(false);
+                int index = choice.index;
+                button.onClick.AddListener(() =>
+                {
+                    onChoiceSelected.Invoke(index);
+                });
             }
         }
+
+        choicePanel.gameObject.SetActive(true);
+    }
+
+    public void HideChoices()
+    {
+        choicePanel.gameObject.SetActive(false);
     }
 
     public void ShowCursor(bool show)

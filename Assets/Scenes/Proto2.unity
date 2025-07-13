@@ -214,6 +214,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1900100724, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900100724, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900100724, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900100724, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3983633547188770086, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
       propertyPath: m_Name
       value: VNController
@@ -262,9 +278,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9212122030715280745, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
-      propertyPath: m_Name
-      value: SafeContainer
+    - target: {fileID: 3983633547604621099, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}

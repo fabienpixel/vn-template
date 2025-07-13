@@ -64,9 +64,15 @@ public class InkStoryController : MonoBehaviour
             if (!string.IsNullOrWhiteSpace(chunk))
                 textChunks.Enqueue(chunk.Trim());
         }
+
         DisplayNextChunk();
-        uiManager.DisplayChoices(_inkStory.currentChoices, ChooseChoice);
+
+        if (_inkStory.currentChoices.Count > 0)
+            uiManager.DisplayChoices(_inkStory.currentChoices, ChooseChoice);
+        else
+            uiManager.HideChoices(); // hide when done
     }
+
 
     void DisplayNextChunk()
     {
