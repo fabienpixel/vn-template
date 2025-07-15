@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Ink.Runtime;
 using System.Collections.Generic;
 
@@ -13,6 +13,8 @@ public class InkStoryController : MonoBehaviour
     private bool waitingForClickToContinue = false;
     private bool isTyping = false;
     private string currentText = "";
+    public bool isChoicePanelActive = false;
+
 
     void Start()
     {
@@ -68,10 +70,16 @@ public class InkStoryController : MonoBehaviour
         DisplayNextChunk();
 
         if (_inkStory.currentChoices.Count > 0)
+        {
+            isChoicePanelActive = false; // will be activated after final line click
             uiManager.DisplayChoices(_inkStory.currentChoices, ChooseChoice);
+        }
         else
-            uiManager.HideChoices(); // hide when done
-    }
+        {
+            isChoicePanelActive = false;
+            uiManager.HideChoices();
+        }
+    } // ✅ This closes RefreshUI
 
 
     void DisplayNextChunk()
@@ -92,7 +100,13 @@ public class InkStoryController : MonoBehaviour
         isTyping = false;
         waitingForClickToContinue = true;
         uiManager.ShowCursor(true);
+
+        if (textChunks.Count == 0 && _inkStory.currentChoices.Count > 0)
+        {
+            isChoicePanelActive = true;
+        }
     }
+
 
     public void ChooseChoice(int index)
     {
