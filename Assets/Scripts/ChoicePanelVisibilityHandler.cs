@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ChoiceVisibilityHandler : MonoBehaviour
+public class ChoicePanelVisibilityHandler : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private InkStoryController storyController;
