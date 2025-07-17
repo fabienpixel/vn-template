@@ -214,6 +214,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1455516800, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
+      propertyPath: visibleAlpha
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3983633547188770086, guid: 75c4b4f8b3632e3419990c46fef8383c, type: 3}
       propertyPath: m_Name
       value: VNController
