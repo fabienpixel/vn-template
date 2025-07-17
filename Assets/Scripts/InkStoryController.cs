@@ -27,6 +27,15 @@ public class InkStoryController : MonoBehaviour
 
     void Update()
     {
+        // ⬇️ NEW logic: Left-lick to show choices when text is finished
+        if (textChunks.Count == 0 && isTyping == false && _inkStory.currentChoices.Count > 0 && Input.GetMouseButtonDown(0))
+        {
+            isChoicePanelActive = true;
+            uiManager.ShowCursor(false);
+            return; // prevent double handling on same frame
+        }
+
+        // ⬇️ Existing logic: Left-click for normal interactions
         if (Input.GetMouseButtonDown(0))
         {
             if (isTyping)
@@ -34,6 +43,7 @@ public class InkStoryController : MonoBehaviour
                 uiManager.SkipTypewriter(currentText, OnTypewriterFinished);
                 isTyping = false;
                 waitingForClickToContinue = true;
+                isChoicePanelActive = false;
             }
             else if (waitingForClickToContinue)
             {
@@ -43,6 +53,7 @@ public class InkStoryController : MonoBehaviour
             }
         }
     }
+
 
     void RefreshUI()
     {
@@ -87,6 +98,7 @@ public class InkStoryController : MonoBehaviour
         if (textChunks.Count == 0)
         {
             waitingForClickToContinue = false;
+            isChoicePanelActive = false;
             return;
         }
 
@@ -100,10 +112,11 @@ public class InkStoryController : MonoBehaviour
         isTyping = false;
         waitingForClickToContinue = true;
         uiManager.ShowCursor(true);
+        isChoicePanelActive = false;
 
         if (textChunks.Count == 0 && _inkStory.currentChoices.Count > 0)
         {
-            isChoicePanelActive = true;
+            isChoicePanelActive = false;
         }
     }
 

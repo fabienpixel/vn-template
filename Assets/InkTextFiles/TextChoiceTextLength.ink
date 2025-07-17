@@ -1,10 +1,13 @@
 You’re about to test choice scaling at 23–27 character length.
 
+This is a second sentence.
+
 -> Test1
 
 === Test1 ===
 # speaker: System
 Test 1: Displaying **1 choice**
+
 
 * [Exactly 23 characters long (23)]
     -> Test2
