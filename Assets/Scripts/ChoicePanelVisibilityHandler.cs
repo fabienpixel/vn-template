@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class ChoicePanelVisibilityHandler : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private InkStoryController storyController;
+    [SerializeField] private VNUIManager uIController;
     [SerializeField] private Image backgroundImage;
-
-    [Header("Fade Settings")]
-    [SerializeField] private float fadeSpeed = 5f;
-    [SerializeField] private float visibleAlpha = 1f;
-    [SerializeField] private float hiddenAlpha = 0f;
 
     private void Awake()
     {
@@ -22,17 +17,20 @@ public class ChoicePanelVisibilityHandler : MonoBehaviour
 
         if (backgroundImage == null)
             backgroundImage = GetComponent<Image>();
+
+        if (uIController == null)
+            uIController = FindObjectOfType<VNUIManager>();
     }
 
     private void Update()
     {
-        if (backgroundImage == null || storyController == null)
+        if (backgroundImage == null || storyController == null || uIController == null)
             return;
 
-        float targetAlpha = storyController.isChoicePanelActive ? visibleAlpha : hiddenAlpha;
+        float targetAlpha = storyController.isChoicePanelActive ? uIController.visibleAlpha : uIController.hiddenAlpha;
 
         Color currentColor = backgroundImage.color;
-        currentColor.a = Mathf.Lerp(currentColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
+        currentColor.a = Mathf.Lerp(currentColor.a, targetAlpha, Time.deltaTime * uIController.fadeSpeed);
         backgroundImage.color = currentColor;
     }
 }

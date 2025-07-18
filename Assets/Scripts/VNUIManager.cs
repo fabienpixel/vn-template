@@ -11,6 +11,9 @@ public class VNUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textUIElement;
     [SerializeField] private GameObject choiceButtonPrefab;
     [SerializeField] private Transform choicePanel;
+    [SerializeField] public float fadeSpeed = 5f;
+    [SerializeField] public float visibleAlpha = 1f;
+    [SerializeField] public float hiddenAlpha = 0f;
     [SerializeField] private TextMeshProUGUI speakerUIElement;
 
     [Header("Typewriter Settings")]
